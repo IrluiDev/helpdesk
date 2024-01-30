@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template
+        id="portal_my_home"
+        name="Portal My Home : ticket entries"
+        inherit_id="portal.portal_my_home"
+        priority="40"
+        customize_show="True"
+    >
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Tickets</t>
+                <t t-set="url" t-value="'/my/tickets_app'" />
+                <t t-set="placeholder_count" t-value="'ticket_count'" />
+            </t>
+            <form method="POST" t-attf-action="/new/ticket_app">
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    t-att-value="request.csrf_token()"
+                />
+                <button
+                    name="create_new_ticket_app"
+                    type="action"
+                    class="btn btn-primary"
+                    style="float: right; margin-right: 0px; margin-bottom: 5px;"
+                >New Ticket</button>
+            </form>
+        </xpath>
+    </template>
+    <template id="portal_my_tickets" name="My Tickets">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Tickets</t>
+            </t>
+
+            <form method="POST" t-attf-action="/new/ticket_app">
+                <button
+                    name="create_new_ticket_app"
+                    type="action"
+                    class="btn btn-primary"
+                    style="float: right; margin-right: 0px; margin-bottom: 5px;"
+                >New Ticket App</button>
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    t-att-value="request.csrf_token()"
+                />
+            </form>
+
+            <t t-if="not grouped_tickets">
+                <div class="alert alert-warning mt8" role="alert">
+                    <p>No tickets found.</p>
+                </div>
+            </t>
+            <t t-call="helpdesk_mgmt.portal_ticket_list" />
+        </t>
+    </template>
+
+    <template id="portal_create_ticket_app" name="Create Ticket App">
+        <t t-call="portal.portal_layout">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center">
+                            Send a new ticket</h1>
+                    </div>
+                </div>
+            </div>
+            <form
+                action="/submitted/ticket_app"
+                method="POST"
+                class="form-horizontal mt32"
+                enctype="multipart/form-data"
+            >
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    t-att-value="request.csrf_token()"
+                />
+                <div class="form-group input-form">
+                    <label
+                        class="col-md-3 col-sm-4 control-label"
+                        for="subject"
+                    >Title</label>
+                    <div class="col-md-7 col-sm-8">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="subject"
+                            required="True"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-7 col-sm-8">
+                        <label for="hotel_id">Select Hotel:</label>
+                        <select class="form-control" id="hotel_id" name="hotel_id">
+                            <option value="" />
+                            <t t-foreach="hotels" t-as="hotel_id">
+                                <option t-attf-value="#{hotel_id.id}">
+                                    <t t-esc="hotel_id.name" />
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-sm-offset-4 col-sm-8 col-md-7">
+                        <button class="btn btn-primary btn-lg">Submit Ticket</button>
+                    </div>
+                </div>
+            </form>
+        </t>
+    </template>
+</odoo>

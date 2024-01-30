@@ -50,11 +50,24 @@ class HelpdeskTicketController(http.Controller):
         email = http.request.env.user.email
         name = http.request.env.user.name
         company = request.env.company
+        # Get hotels list
+        hotel_model = http.request.env["pms.property"]
+        hotels = hotel_model.search([("company_id", "=", company.id)])
+        hotel = http.request.env.user.pms_property_id
+
+        # Get rooms based on the selected hotel
+        _model = http.request.env["pms.property"]
+        hotels = hotel_model.search([("company_id", "=", company.id)])
+        hotel = http.request.env.user.pms_property_id
+
+        rooms = hotel.room_ids
         return http.request.render(
             "helpdesk_mgmt.portal_create_ticket",
             {
                 "categories": categories,
                 "teams": self._get_teams(),
+                "hotels": hotels,
+                "rooms":rooms,
                 "email": email,
                 "name": name,
                 "ticket_team_id_required": (
@@ -74,6 +87,8 @@ class HelpdeskTicketController(http.Controller):
         vals = {
             "company_id": company.id,
             "category_id": category.id,
+            "hotel_id": request.params.get('hotel_id'),
+            "room_id": request.params.get('room_id'),
             "description": plaintext2html(kw.get("description")),
             "name": kw.get("subject"),
             "attachment_ids": False,

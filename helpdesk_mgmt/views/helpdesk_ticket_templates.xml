@@ -249,11 +249,8 @@
                                 <div
                                     class="col d-flex align-items-center flex-grow-0 pr-3"
                                 >
-                                    <img
-                                        class="rounded-circle mt-1 o_portal_contact_img"
-                                        t-att-src="image_data_uri(ticket.user_id.avatar_1024)"
-                                        alt="Contact"
-                                    />
+                                <img class="rounded-circle mt-1 o_portal_contact_img"
+                                    t-att-src="image_data_uri(ticket.user_id.image_1024)" alt="Contact"/>
                                 </div>
                                 <div class="col pl-md-0">
                                     <div
@@ -283,9 +280,8 @@
                                 <div
                                     class="col d-flex align-items-center flex-grow-0 pr-3"
                                 >
-                                    <img
-                                        class="rounded-circle mt-1 o_portal_contact_img"
-                                        t-att-src="image_data_uri(ticket.partner_id.avatar_1024)"
+                                <img class="rounded-circle mt-1 o_portal_contact_img"
+                                t-attf-src="image_data_uri(ticket.user_id.image_1024)"
                                         alt="Contact"
                                     />
                                 </div>
@@ -381,7 +377,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <h1 class="text-center">Send a new ticket</h1>
+                        <h1 class="text-center">
+                            Send a new ticket</h1>
                     </div>
                 </div>
             </div>
@@ -396,6 +393,43 @@
                     name="csrf_token"
                     t-att-value="request.csrf_token()"
                 />
+                <div class="form-group input-form">
+                    <label
+                        class="col-md-3 col-sm-4 control-label"
+                        for="subject"
+                    >Title</label>
+                    <div class="col-md-7 col-sm-8">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="subject"
+                            required="True"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-7 col-sm-8">
+                        <label for="hotel_id">Select Hotel:</label>
+                        <select class="form-control" id="hotel_id" name="hotel_id">
+                            <option value="" />
+                            <t t-foreach="hotels" t-as="hotel">
+                                <option t-attf-value="#{hotel.id}">
+                                    <t t-esc="hotel.name" />
+                                </option>
+                            </t>
+                        </select>
+
+                        <label for="room_id">Select Room:</label>
+                        <select class="form-control" id="room_id" name="room_id">
+                            <option value="" />
+                            <t t-foreach="rooms" t-as="room">
+                                <option t-attf-value="#{room.id}">
+                                    <t t-esc="room.name" />
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
                 <div class="form-group" t-if="teams">
                     <label
                         class="col-md-3 col-sm-4 control-label"
@@ -441,20 +475,6 @@
                 <div class="form-group">
                     <label
                         class="col-md-3 col-sm-4 control-label"
-                        for="subject"
-                    >Subject</label>
-                    <div class="col-md-7 col-sm-8">
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="subject"
-                            required="True"
-                        />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label
-                        class="col-md-3 col-sm-4 control-label"
                         for="attachment"
                     >Add Attachments</label>
                     <div class="col-md-7 col-sm-8">
@@ -479,7 +499,7 @@
                             class="form-control"
                             name="description"
                             style="min-height: 120px"
-                            required="True"
+                            required="False"
                         />
                     </div>
                 </div>

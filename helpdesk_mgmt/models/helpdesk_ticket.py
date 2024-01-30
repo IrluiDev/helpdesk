@@ -57,6 +57,20 @@ class HelpdeskTicket(models.Model):
         required=True,
         default=lambda self: self.env.company,
     )
+    #Modified section Alda - Hotel and room agregate
+    hotel_id = fields.Many2one(
+        comodel_name="pms.property",
+        string="Hotel",
+        domain="[('company_id', '=', company_id)]",
+        help="The hotel associated with this ticket",
+    )
+    room_id = fields.Many2one(
+        comodel_name="pms.room",
+        string="Habitación",
+        domain="[('pms_property_id', '=', hotel_id)]",
+        help="The room associated with this ticket",
+    )
+    #-------
     channel_id = fields.Many2one(
         comodel_name="helpdesk.ticket.channel",
         string="Channel",
@@ -100,6 +114,14 @@ class HelpdeskTicket(models.Model):
         help="Gives the sequence order when displaying a list of tickets.",
     )
     active = fields.Boolean(default=True)
+
+    #Method of activation of rooms corresponding to the selected hotel
+    @api.onchange("hotel_id")
+    def _onchange_hotel_id(self):
+        if self.hotel_id:
+            return {'domain': {'room_id': [('pms_property_id', '=', self.hotel_id.id)]}}
+        else:
+            return {'domain': {'room_id': []}}
 
     def name_get(self):
         res = []

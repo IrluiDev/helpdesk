@@ -63,6 +63,18 @@ class TestHelpdeskPortalBase(HttpCaseWithUserPortal):
 
         self.assertEqual(resp.status_code, 200)
 
+    def _submit_ticket_app(self, **values):
+        data = {
+            "category": self.env.ref("helpdesk_mgmt.helpdesk_category_1").id,
+            "csrf_token": http.WebRequest.csrf_token(self),
+            "subject": self.new_ticket_title,
+            "description": "\n".join(self.new_ticket_desc_lines),
+        }
+        data.update(**values)
+        resp = self.url_open("/submitted/ticket_app", data=data)
+
+        self.assertEqual(resp.status_code, 200)
+
 
 class TestHelpdeskPortal(TestHelpdeskPortalBase):
     def test_submit_ticket_01(self):

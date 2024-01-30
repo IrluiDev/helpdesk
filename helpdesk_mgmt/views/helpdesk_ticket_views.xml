@@ -171,6 +171,12 @@
                                 options="{'no_create': True}"
                                 groups="base.group_multi_company"
                             />
+                            <field name="hotel_id" options="{'no_create': True}" />
+                            <field
+                                name="room_id"
+                                options="{'no_create': True}"
+                                attrs="{'invisible': [('hotel_id', '=', False)]}"
+                            />
                             <field name="create_date" readonly="1" />
                             <field name="channel_id" />
                         </group>
@@ -222,7 +228,11 @@
                 <field name="priority" widget="priority" />
                 <field name="sequence" widget="handle" />
                 <field name="number" decoration-bf="1" />
+                <field name="team_id" />
                 <field name="name" />
+                <field name="hotel_id" />
+                <field name="room_id" />
+                <field name="category_id" />
                 <field name="partner_id" optional="hide" widget="many2one_avatar" />
                 <field name="partner_name" optional="show" />
                 <field name="user_id" optional="show" widget="many2one_avatar_user" />
@@ -266,6 +276,8 @@
                 <field name="active" />
                 <field name="name" />
                 <field name="partner_name" />
+                <field name="category_id" />
+                <field name="hotel_id" />
                 <field name="user_id" />
                 <field name="sequence" />
                 <field name="color" />
