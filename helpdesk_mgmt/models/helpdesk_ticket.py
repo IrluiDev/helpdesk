@@ -69,6 +69,7 @@ class HelpdeskTicket(models.Model):
         string="Habitación",
         domain="[('pms_property_id', '=', hotel_id)]",
         help="The room associated with this ticket",
+        widget="many2one_tags",
     )
     #-------
     channel_id = fields.Many2one(

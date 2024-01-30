@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <template id="assets_frontend"
+        inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <link href="/helpdesk_mgmt/static/src/css/helpdesk.css"
+                rel="stylesheet"
+                type="text/css"/>
+            <link href="/helpdesk_mgmt/static/src/scss/helpdesk.scss"
+                rel="stylesheet"
+                type="text/scss"/>
+            <script src="/helpdesk_mgmt/static/src/js/helpdesk.js"
+                type="text/javascript" />
+        </xpath>
+    </template>
+</odoo>

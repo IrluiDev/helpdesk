@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 
 
 class HelpdeskTicketController(http.Controller):
-    @http.route("/ticket/close", type="http", auth="user")
+    @http.route("/ticket/close", type="http", auth="user", website=True)
     def support_ticket_close(self, **kw):
         """Close the support ticket"""
         values = {}
@@ -54,12 +54,6 @@ class HelpdeskTicketController(http.Controller):
         hotel_model = http.request.env["pms.property"]
         hotels = hotel_model.search([("company_id", "=", company.id)])
         hotel = http.request.env.user.pms_property_id
-
-        # Get rooms based on the selected hotel
-        _model = http.request.env["pms.property"]
-        hotels = hotel_model.search([("company_id", "=", company.id)])
-        hotel = http.request.env.user.pms_property_id
-
         rooms = hotel.room_ids
         return http.request.render(
             "helpdesk_mgmt.portal_create_ticket",

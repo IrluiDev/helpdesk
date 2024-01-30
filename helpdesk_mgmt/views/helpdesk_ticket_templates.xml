@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
+    <template id="assets_end" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+        <script src="/helpdesk_mgmt/static/src/js/component.js" type="text/javascript" />
+        </xpath>
+    </template>
+    <template id="assets_frontend"
+        inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <link href="/helpdesk_mgmt/static/src/css/helpdesk.css"
+                rel="stylesheet"
+                type="text/css"/>
+            <link href="/helpdesk_mgmt/static/src/scss/helpdesk.scss"
+                rel="stylesheet"
+                type="text/scss"/>
+            <script src="/helpdesk_mgmt/static/src/js/helpdesk.js"
+                type="text/javascript" />
+        </xpath>
+    </template>
     <template
         id="portal_layout"
         name="Portal layout: ticket menu entry"
@@ -397,7 +415,7 @@
                     <label
                         class="col-md-3 col-sm-4 control-label"
                         for="subject"
-                    >Title</label>
+                    ><i class="fa fa-pencil"/> Title</label>
                     <div class="col-md-7 col-sm-8">
                         <input
                             type="text"
@@ -409,25 +427,36 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-7 col-sm-8">
-                        <label for="hotel_id">Select Hotel:</label>
-                        <select class="form-control" id="hotel_id" name="hotel_id">
-                            <option value="" />
-                            <t t-foreach="hotels" t-as="hotel">
-                                <option t-attf-value="#{hotel.id}">
-                                    <t t-esc="hotel.name" />
-                                </option>
-                            </t>
-                        </select>
+                        <div class="form-group">
+                            <div class="col-md-7 col-sm-8">
+                                <label for="hotel_id">Select Hotel:</label>
+                                <select class="form-control" id="hotel_id" name="hotel_id">
+                                    <option value="" />
+                                    <t t-foreach="hotels" t-as="hotel">
+                                        <option t-attf-value="#{hotel.id}">
+                                            <t t-esc="hotel.name" />
+                                        </option>
+                                    </t>
+                                </select>
 
-                        <label for="room_id">Select Room:</label>
-                        <select class="form-control" id="room_id" name="room_id">
-                            <option value="" />
-                            <t t-foreach="rooms" t-as="room">
-                                <option t-attf-value="#{room.id}">
-                                    <t t-esc="room.name" />
-                                </option>
-                            </t>
-                        </select>
+                                <label for="room_id">Select Room:</label>
+                                <!-- Use the t-attf-widget attribute to set the widget -->
+                                <select
+                                    class="form-control"
+                                    id="room_id"
+                                    name="room_id"
+                                    t-attf-widget="many2one_tags"
+                                    t-attf-domain="[('pms_property_id', '=', parseInt($('#hotel_id').val()))]"
+                                >
+                                    <option value="" />
+                                    <t t-foreach="rooms" t-as="room">
+                                        <option t-attf-value="#{room.id}">
+                                            <t t-esc="room.name" />
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group" t-if="teams">
