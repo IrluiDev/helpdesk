@@ -2,20 +2,28 @@
 <odoo>
     <template id="assets_end" inherit_id="web.assets_backend">
         <xpath expr="." position="inside">
-        <script src="/helpdesk_mgmt/static/src/js/component.js" type="text/javascript" />
+        <script
+                src="/helpdesk_mgmt/static/src/js/component.js"
+                type="text/javascript"
+            />
         </xpath>
     </template>
-    <template id="assets_frontend"
-        inherit_id="web.assets_frontend">
+    <template id="assets_frontend" inherit_id="web.assets_frontend">
         <xpath expr="." position="inside">
-            <link href="/helpdesk_mgmt/static/src/css/helpdesk.css"
+            <link
+                href="/helpdesk_mgmt/static/src/css/helpdesk.css"
                 rel="stylesheet"
-                type="text/css"/>
-            <link href="/helpdesk_mgmt/static/src/scss/helpdesk.scss"
+                type="text/css"
+            />
+            <link
+                href="/helpdesk_mgmt/static/src/scss/helpdesk.scss"
                 rel="stylesheet"
-                type="text/scss"/>
-            <script src="/helpdesk_mgmt/static/src/js/helpdesk.js"
-                type="text/javascript" />
+                type="text/scss"
+            />
+            <script
+                src="/helpdesk_mgmt/static/src/js/helpdesk.js"
+                type="text/javascript"
+            />
         </xpath>
     </template>
     <template
@@ -267,8 +275,11 @@
                                 <div
                                     class="col d-flex align-items-center flex-grow-0 pr-3"
                                 >
-                                <img class="rounded-circle mt-1 o_portal_contact_img"
-                                    t-att-src="image_data_uri(ticket.user_id.image_1024)" alt="Contact"/>
+                                <img
+                                        class="rounded-circle mt-1 o_portal_contact_img"
+                                        t-att-src="image_data_uri(ticket.user_id.image_1024)"
+                                        alt="Contact"
+                                    />
                                 </div>
                                 <div class="col pl-md-0">
                                     <div
@@ -298,8 +309,9 @@
                                 <div
                                     class="col d-flex align-items-center flex-grow-0 pr-3"
                                 >
-                                <img class="rounded-circle mt-1 o_portal_contact_img"
-                                t-attf-src="image_data_uri(ticket.user_id.image_1024)"
+                                <img
+                                        class="rounded-circle mt-1 o_portal_contact_img"
+                                        t-attf-src="image_data_uri(ticket.user_id.image_1024)"
                                         alt="Contact"
                                     />
                                 </div>
@@ -412,10 +424,9 @@
                     t-att-value="request.csrf_token()"
                 />
                 <div class="form-group input-form">
-                    <label
-                        class="col-md-3 col-sm-4 control-label"
-                        for="subject"
-                    ><i class="fa fa-pencil"/> Title</label>
+                    <label class="col-md-3 col-sm-4 control-label" for="subject"><i
+                            class="fa fa-pencil"
+                        /> Title</label>
                     <div class="col-md-7 col-sm-8">
                         <input
                             type="text"
@@ -430,8 +441,13 @@
                         <div class="form-group">
                             <div class="col-md-7 col-sm-8">
                                 <label for="hotel_id">Select Hotel:</label>
-                                <select class="form-control" id="hotel_id" name="hotel_id">
-                                    <option value="" />
+                                <select
+                                    class="form-control"
+                                    id="hotel_id"
+                                    name="hotel_id"
+                                    required="required"
+                                >
+                                    <option value="">Selecciona una opción</option>
                                     <t t-foreach="hotels" t-as="hotel">
                                         <option t-attf-value="#{hotel.id}">
                                             <t t-esc="hotel.name" />
@@ -490,9 +506,9 @@
                             class="form-control"
                             id="category"
                             name="category"
-                            t-att-required="ticket_category_id_required"
+                            required="required"
                         >
-                            <option value="" />
+                            <option value="">Selecciona una opción</option>
                             <t t-foreach="categories" t-as="cat">
                                 <option t-attf-value="#{cat.id}">
                                     <t t-esc="cat.name" />

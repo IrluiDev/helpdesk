@@ -49,6 +49,12 @@
         <field name="res_model">helpdesk.ticket.tag</field>
         <field name="view_mode">tree,form</field>
     </record>
+    <record id="helpdesk_ticket_staff_action" model="ir.actions.act_window">
+        <field name="name">Ticket Staff</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">helpdesk.ticket.staff</field>
+        <field name="view_mode">tree,form</field>
+    </record>
     <!-- Menus -->
     <menuitem
         id="helpdesk_ticket_main_menu"
@@ -133,5 +139,12 @@
         parent="helpdesk_ticket_config_main_menu"
         action="helpdesk_ticket_tag_action"
         sequence="45"
+    />
+    <menuitem
+        id="helpdesk_ticket_staff"
+        name="Ticket Staff"
+        parent="helpdesk_ticket_config_main_menu"
+        action="helpdesk_ticket_staff_action"
+        sequence="55"
     />
 </odoo>

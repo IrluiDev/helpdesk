@@ -44,7 +44,6 @@ class HelpdeskTicket(models.Model):
     partner_id = fields.Many2one(comodel_name="res.partner", string="Contact")
     partner_name = fields.Char()
     partner_email = fields.Char(string="Email")
-
     last_stage_update = fields.Datetime(default=fields.Datetime.now)
     assigned_date = fields.Datetime()
     closed_date = fields.Datetime()
@@ -57,7 +56,7 @@ class HelpdeskTicket(models.Model):
         required=True,
         default=lambda self: self.env.company,
     )
-    #Modified section Alda - Hotel and room agregate
+    # Modified section Alda - Hotel and room agregate
     hotel_id = fields.Many2one(
         comodel_name="pms.property",
         string="Hotel",
@@ -71,13 +70,14 @@ class HelpdeskTicket(models.Model):
         help="The room associated with this ticket",
         widget="many2one_tags",
     )
-    #-------
+    # -------
     channel_id = fields.Many2one(
         comodel_name="helpdesk.ticket.channel",
         string="Channel",
         help="Channel indicates where the source of a ticket"
         "comes from (it could be a phone call, an email...)",
     )
+
     category_id = fields.Many2one(
         comodel_name="helpdesk.ticket.category",
         string="Category",
@@ -116,13 +116,13 @@ class HelpdeskTicket(models.Model):
     )
     active = fields.Boolean(default=True)
 
-    #Method of activation of rooms corresponding to the selected hotel
+    # Method of activation of rooms corresponding to the selected hotel
     @api.onchange("hotel_id")
     def _onchange_hotel_id(self):
         if self.hotel_id:
-            return {'domain': {'room_id': [('pms_property_id', '=', self.hotel_id.id)]}}
+            return {"domain": {"room_id": [("pms_property_id", "=", self.hotel_id.id)]}}
         else:
-            return {'domain': {'room_id': []}}
+            return {"domain": {"room_id": []}}
 
     def name_get(self):
         res = []
