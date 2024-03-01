@@ -26,6 +26,12 @@
             />
         </xpath>
     </template>
+    <template id="assets_frontend" name="helpdesk_ticket_assets" inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/helpdesk_mgmt/static/src/js/helpdesk_ticket_buttons.js"></script>
+        </xpath>
+    </template>
+
     <template
         id="portal_layout"
         name="Portal layout: ticket menu entry"
@@ -117,30 +123,37 @@
                         <tr
                             t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}"
                         >
-                                <th class="text-left">By</th>
-                                <th class="text-left">Number</th>
-                                <th t-if="groupby == 'none'">Title</th>
-                                <th t-if="groupby == 'category'">
-                                    <em
-                                    class="font-weight-normal text-muted"
-                                >Tickets in category:</em>
-                                    <span
-                                    class="text-truncate"
-                                    t-field="tickets[0].sudo().category_id.name"
-                                /></th>
-                                <th t-if="groupby == 'stage'">
-                                    <em
-                                    class="font-weight-normal text-muted"
-                                >Tickets in stage:</em>
-                                    <span
-                                    class="text-truncate"
-                                    t-field="tickets[0].sudo().stage_id.name"
-                                /></th>
-                                <th t-if="groupby != 'category'">Category</th>
-                                <th t-if="groupby != 'stage'">Stage</th>
-                                <th>Create Date</th>
-                                <th>Last Stage Update</th>
-                                <th>Close Date</th>
+                            <th class="text-left">By</th>
+                            <th class="text-left">Number</th>
+                            <th t-if="groupby == 'none'">Title</th>
+                            <th t-if="groupby == 'category'">
+                                <em class="font-weight-normal text-muted">Tickets in category:</em>
+                                <span class="text-truncate" t-field="tickets[0].sudo().category_id.name" />
+                            </th>
+                            <th t-if="groupby == 'stage'">
+                                <em class="font-weight-normal text-muted">Tickets in stage:</em>
+                                <span class="text-truncate" t-field="tickets[0].sudo().stage_id.name" />
+                            </th>
+                            <th t-if="groupby == 'hotel'">
+                                <em class="font-weight-normal text-muted">Tickets in hotel:</em>
+                                <span class="text-truncate" t-field="tickets[0].sudo().hotel_id.name" />
+                            </th>
+                            <th t-if="groupby == 'room'">
+                                <em class="font-weight-normal text-muted">Tickets in room:</em>
+                                <span class="text-truncate" t-field="tickets[0].sudo().room_id.name" />
+                            </th>
+                            <th t-if="groupby == 'staff'">
+                                <em class="font-weight-normal text-muted">Tickets in staff:</em>
+                                <span class="text-truncate" t-field="tickets[0].sudo().staff_id.name" />
+                            </th>
+                            <th t-if="groupby != 'category'">Category</th>
+                            <th t-if="groupby != 'stage'">Stage</th>
+                            <th t-if="groupby != 'hotel'">Hotel</th>
+                            <th t-if="groupby != 'room'">Room</th>
+                            <th t-if="groupby != 'staff'">Staff</th>
+                            <th>Create Date</th>
+                            <th>Last Stage Update</th>
+                            <th>Close Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -153,9 +166,7 @@
                                     <span t-esc="ticket.number" />
                                 </td>
                                 <td>
-                                    <a
-                                        t-attf-href="/my/ticket/#{ticket.id}?{{ keep_query() }}"
-                                    >
+                                    <a t-attf-href="/my/ticket/#{ticket.id}?{{ keep_query() }}">
                                         <span t-field="ticket.name" />
                                     </a>
                                 </td>
@@ -163,10 +174,27 @@
                                     <span t-esc="ticket.category_id.name" />
                                 </td>
                                 <td t-if="groupby != 'stage'">
-                                    <span
-                                        class="badge badge-pill badge-info"
+                                    <span class="badge badge-pill badge-info"
                                         title="Current stage of the ticket"
                                         t-esc="ticket.stage_id.name"
+                                    />
+                                </td>
+                                <td t-if="groupby != 'hotel'">
+                                    <span class="badge badge-pill badge-info"
+                                        title="Current hotel of the ticket"
+                                        t-esc="ticket.sudo().hotel_id.name"
+                                    />
+                                </td>
+                                <td t-if="groupby != 'room'">
+                                    <span class="badge badge-pill badge-info"
+                                        title="Current room of the ticket"
+                                        t-esc="ticket.sudo().room_id.name"
+                                    />
+                                </td>
+                                <td t-if="groupby != 'staff'">
+                                    <span class="badge badge-pill badge-info"
+                                        title="Current staff of the ticket"
+                                        t-esc="ticket.sudo().staff_id.name"
                                     />
                                 </td>
                                 <td>
@@ -211,7 +239,6 @@
                         </div>
                     </div>
                 </t>
-
                 <t t-set="card_body">
                     <div class="row mb-4">
                         <div class="col-12 col-md-6" name="portal_ticket_col_0">
@@ -219,8 +246,20 @@
                                     t-field="ticket.create_date"
                                     t-options='{"widget": "datetime"}'
                                 /></div>
+                            <div><strong>Priority:</strong>
+                                <span t-field="ticket.priority"/>
+                            </div>
+                            <div><strong>Hotel:</strong> <span
+                                    t-field="ticket.sudo().hotel_id.name"
+                            /></div>
+                            <div><strong>Room:</strong> <span
+                                    t-field="ticket.sudo().room_id.name"
+                            /></div>
                             <div><strong>Category:</strong> <span
                                     t-field="ticket.category_id"
+                                /></div>
+                            <div><strong>Tag:</strong> <span
+                                    t-field="ticket.tag_ids"
                                 /></div>
                         </div>
                         <div
@@ -266,6 +305,7 @@
                                 </t>
                             </div>
                         </div>
+                        
                     </div>
 
                     <div class="row mt-3" t-if="ticket.user_id or ticket.partner_id">
@@ -424,6 +464,17 @@
                     t-att-value="request.csrf_token()"
                 />
                 <div class="form-group input-form">
+                    <div class="col-md-7 col-sm-8">
+                        <label class="col-md-3 col-sm-4 control-label" for="company"><i
+                            class="fa fa-building-o"
+                        /> Company</label>
+                        <td class="text-left">
+                            <t t-foreach="companies" t-as="company">
+                                <span t-esc="company.name"/>
+                                <br/>
+                            </t>
+                        </td>
+                    </div>
                     <label class="col-md-3 col-sm-4 control-label" for="subject"><i
                             class="fa fa-pencil"
                         /> Title</label>
@@ -446,8 +497,10 @@
                                     id="hotel_id"
                                     name="hotel_id"
                                     required="required"
+                                    t-attf-widget="many2one_tags"
+                                    t-attf-domain="[('user_ids', 'in', [user.id])]"
                                 >
-                                    <option value="">Selecciona una opción</option>
+                                    <option value="">Selecciona una hotel</option>
                                     <t t-foreach="hotels" t-as="hotel">
                                         <option t-attf-value="#{hotel.id}">
                                             <t t-esc="hotel.name" />
@@ -464,7 +517,7 @@
                                     t-attf-widget="many2one_tags"
                                     t-attf-domain="[('pms_property_id', '=', parseInt($('#hotel_id').val()))]"
                                 >
-                                    <option value="" />
+                                    <option value=""></option>
                                     <t t-foreach="rooms" t-as="room">
                                         <option t-attf-value="#{room.id}">
                                             <t t-esc="room.name" />
@@ -512,6 +565,26 @@
                             <t t-foreach="categories" t-as="cat">
                                 <option t-attf-value="#{cat.id}">
                                     <t t-esc="cat.name" />
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label
+                        class="col-md-3 col-sm-4 control-label"
+                        for="tag"
+                    >Tag</label>
+                    <div class="col-md-7 col-sm-8">
+                        <select
+                            class="form-control"
+                            id="tag_ids"
+                            name="tag_ids"
+                        >
+                            <option value="">Selecciona una opción</option>
+                            <t t-foreach="tags" t-as="tag">
+                                <option t-attf-value="#{tag.id}">
+                                    <t t-esc="tag.name" />
                                 </option>
                             </t>
                         </select>
