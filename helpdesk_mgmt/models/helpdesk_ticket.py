@@ -49,12 +49,15 @@ class HelpdeskTicket(models.Model):
     closed_date = fields.Datetime()
     closed = fields.Boolean(related="stage_id.closed")
     unattended = fields.Boolean(related="stage_id.unattended", store=True)
-    tag_ids = fields.Many2many(comodel_name="helpdesk.ticket.tag", string="Tags")
     company_id = fields.Many2one(
         comodel_name="res.company",
         string="Company",
         required=True,
         default=lambda self: self.env.company,
+    )
+    is_staff = fields.Boolean(
+        default=False,
+        help="Indicates whether it is a staff or not.",
     )
     # Modified section Alda - Hotel and room agregate
     hotel_id = fields.Many2one(
@@ -70,12 +73,24 @@ class HelpdeskTicket(models.Model):
         help="The room associated with this ticket",
         widget="many2one_tags",
     )
+    # Modified section Alda - Add Staff
+    staff_id = fields.Many2one(
+        comodel_name="helpdesk.ticket.staff",
+        string="Staff",
+        domain="[('company_id', '=', company_id)]",
+        help="The hotel associated with this ticket",
+    )
     # -------
     channel_id = fields.Many2one(
         comodel_name="helpdesk.ticket.channel",
         string="Channel",
         help="Channel indicates where the source of a ticket"
         "comes from (it could be a phone call, an email...)",
+    )
+    tag_ids = fields.Many2one(
+        comodel_name="helpdesk.ticket.tag",
+        string="Tags",
+        help="Tag indicates a place that ticket",
     )
 
     category_id = fields.Many2one(
@@ -117,10 +132,31 @@ class HelpdeskTicket(models.Model):
     active = fields.Boolean(default=True)
 
     # Method of activation of rooms corresponding to the selected hotel
+    @api.onchange("company_id")
+    def _onchange_company_id(self):
+        if self.company_id:
+            # Utilizar sudo para acceder al modelo pms.property y filtrar por usuario actual
+            hotels = (
+                self.env["pms.property"]
+                .sudo()
+                .search([("user_ids", "=", self.env.user.id)])
+            )
+            hotel_ids = hotels.ids if hotels else []
+            return {"domain": {"hotel_id": [("id", "in", hotel_ids)]}}
+        else:
+            return {"domain": {"hotel_id": []}}
+
     @api.onchange("hotel_id")
     def _onchange_hotel_id(self):
         if self.hotel_id:
-            return {"domain": {"room_id": [("pms_property_id", "=", self.hotel_id.id)]}}
+            # Utilizar sudo para acceder al modelo pms.room y filtrar por pms_property_id
+            rooms = (
+                self.env["pms.room"]
+                .sudo()
+                .search([("pms_property_id", "=", self.hotel_id.id)])
+            )
+            room_ids = rooms.ids if rooms else []
+            return {"domain": {"room_id": [("id", "in", room_ids)]}}
         else:
             return {"domain": {"room_id": []}}
 
