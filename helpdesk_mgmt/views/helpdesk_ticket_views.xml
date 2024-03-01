@@ -171,7 +171,17 @@
                                 options="{'no_create': True}"
                                 groups="base.group_multi_company"
                             />
-                            <field name="hotel_id" options="{'no_create': True}" />
+                            <field name="is_staff" widget="boolean_checkbox" />
+                            <field
+                                name="staff_id"
+                                options="{'no_create': True}"
+                                attrs="{'invisible': [('is_staff', '=', False)]}"
+                            />
+                            <field
+                                name="hotel_id"
+                                options="{'no_create': True}"
+                                attrs="{'invisible': [('is_staff', '=', True)]}"
+                            />
                             <field
                                 name="room_id"
                                 options="{'no_create': True}"
@@ -181,16 +191,27 @@
                             <field name="channel_id" />
                         </group>
                         <group>
-                            <field name="partner_id" />
-                            <field name="partner_name" />
-                            <field name="partner_email" />
-                            <field name="category_id" />
+                            <field
+                                name="partner_id"
+                                options="{'no_create': True, 'no_open': True, 'no_create_edit': True}"
+                                widget="selection"
+                            />
+                            <field name="partner_name" options="{'no_create': True}" />
+                            <field
+                                name="partner_email"
+                                options="{'no_create': True}"
+                                readonly="1"
+                            />
+                            <field
+                                name="category_id"
+                                options="{'no_create': True}"
+                                widget="selection"
+                            />
                             <field
                                 name="tag_ids"
-                                widget="many2many_tags"
-                                options="{'no_create_edit': True, 'color_field': 'color',}"
+                                widget="selection"
+                                options="{'no_create': True, 'color_field': 'color', 'no_open': True, 'no_quick_create': True, 'no_create_edit': True}"
                             />
-                            <field name="sequence" groups="base.group_no_one" />
                         </group>
                     </group>
                     <group>
@@ -232,6 +253,7 @@
                 <field name="name" />
                 <field name="hotel_id" />
                 <field name="room_id" />
+                <field name="staff_id" />
                 <field name="category_id" />
                 <field name="partner_id" optional="hide" widget="many2one_avatar" />
                 <field name="partner_name" optional="show" />
@@ -240,7 +262,7 @@
                 <field name="closed" invisible="1" />
                 <field
                     name="tag_ids"
-                    widget="many2many_tags"
+                    widget="many2one"
                     options="{'color_field': 'color'}"
                     optional="show"
                 />
@@ -278,6 +300,7 @@
                 <field name="partner_name" />
                 <field name="category_id" />
                 <field name="hotel_id" />
+                <field name="staff_id" />
                 <field name="user_id" />
                 <field name="sequence" />
                 <field name="color" />
@@ -298,7 +321,7 @@
                                     <field name="name" />
                                     <field
                                         name="tag_ids"
-                                        widget="many2many_tags"
+                                        widget="many2one_tags"
                                         options="{'color_field': 'color'}"
                                     />
                                     <field name="number" />
