@@ -103,10 +103,22 @@
                         context="{'group_by':'team_id'}"
                     />
                     <filter
+                        string="Hotel"
+                        name="group_hotel"
+                        domain="[]"
+                        context="{'group_by':'hotel_id'}"
+                    />
+                    <filter
                         string="User"
                         name="group_user"
                         domain="[]"
                         context="{'group_by':'user_id'}"
+                    />
+                    <filter
+                        string="Office"
+                        name="group_office"
+                        domain="[]"
+                        context="{'group_by':'office_id'}"
                     />
                     <filter
                         string="Stage"
@@ -171,16 +183,16 @@
                                 options="{'no_create': True}"
                                 groups="base.group_multi_company"
                             />
-                            <field name="is_staff" widget="boolean_checkbox" />
+                            <field name="is_office" widget="boolean_checkbox" />
                             <field
-                                name="staff_id"
+                                name="office_id"
                                 options="{'no_create': True}"
-                                attrs="{'invisible': [('is_staff', '=', False)]}"
+                                attrs="{'invisible': [('is_office', '=', False)]}"
                             />
                             <field
                                 name="hotel_id"
                                 options="{'no_create': True}"
-                                attrs="{'invisible': [('is_staff', '=', True)]}"
+                                attrs="{'invisible': [('is_office', '=', True)]}"
                             />
                             <field
                                 name="room_id"
@@ -250,10 +262,11 @@
                 <field name="sequence" widget="handle" />
                 <field name="number" decoration-bf="1" />
                 <field name="team_id" />
+                <field name="company_id" />
                 <field name="name" />
                 <field name="hotel_id" />
                 <field name="room_id" />
-                <field name="staff_id" />
+                <field name="office_id" />
                 <field name="category_id" />
                 <field name="partner_id" optional="hide" widget="many2one_avatar" />
                 <field name="partner_name" optional="show" />
@@ -300,7 +313,7 @@
                 <field name="partner_name" />
                 <field name="category_id" />
                 <field name="hotel_id" />
-                <field name="staff_id" />
+                <field name="office_id" />
                 <field name="user_id" />
                 <field name="sequence" />
                 <field name="color" />

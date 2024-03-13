@@ -220,6 +220,8 @@ class CustomerPortalHelpdesk(CustomerPortal):
                 "order": 2,
             },
             "stage": {"input": "stage", "label": _("Stage"), "order": 3},
+            "hotel": {"input": "hotel", "label": _("Hotel"), "order": 4},
+            "office": {"input": "office", "label": _("Office"), "order": 5},
         }
         return dict(sorted(values.items(), key=lambda item: item[1]["order"]))
 
@@ -251,6 +253,8 @@ class CustomerPortalHelpdesk(CustomerPortal):
         return {
             "category": "category_id",
             "stage": "stage_id",
+            "hotel": "hotel_id",
+            "office": "office_id",
         }
 
     def _ticket_get_order(self, order, groupby):

@@ -42,26 +42,41 @@ class HelpdeskTicketController(http.Controller):
 
     @http.route("/new/ticket", type="http", auth="user", website=True)
     def create_new_ticket(self, **kw):
+        # Obtener el usuario actual
+        user = request.env.user
+        # Verificar si el usuario pertenece al grupo helpdesk_mgmt.group_helpdesk_user_team
+        user_belongs_to_group = user.has_group('helpdesk_mgmt.group_helpdesk_user_team' or 'helpdesk_mgmt.group_helpdesk_manager')
+        # Obtener las compañías asignadas al usuario actual
+        assigned_companies = user.company_ids
         company = request.env.company
         category_model = http.request.env["helpdesk.ticket.category"]
         categories = category_model.with_company(company.id).search(
             [("active", "=", True)]
         )
+        tag_model = http.request.env["helpdesk.ticket.tag"]
+        tags = tag_model.with_company(company.id).search([("active", "=", True)])
         email = http.request.env.user.email
         name = http.request.env.user.name
-        company = request.env.company
-        # Get hotels list
         hotel_model = http.request.env["pms.property"]
-        hotels = hotel_model.search([("company_id", "=", company.id)])
-        hotel = http.request.env.user.pms_property_id
-        rooms = hotel.room_ids
+        hotels = hotel_model.sudo().search(
+            [("user_ids", "in", [http.request.env.user.id])]
+        )
+        all_room_ids = [room_id for hotel in hotels for room_id in hotel.room_ids.ids]
+
+        room_model = http.request.env["pms.room"]
+        rooms = room_model.sudo().search(
+            [("id", "in", all_room_ids)]
+        )
         return http.request.render(
             "helpdesk_mgmt.portal_create_ticket",
             {
+                "user_belongs_to_group": user_belongs_to_group,
+                "companies": assigned_companies,
                 "categories": categories,
                 "teams": self._get_teams(),
                 "hotels": hotels,
-                "rooms":rooms,
+                "rooms": rooms,
+                "tags": tags,
                 "email": email,
                 "name": name,
                 "ticket_team_id_required": (
@@ -77,11 +92,22 @@ class HelpdeskTicketController(http.Controller):
         category = http.request.env["helpdesk.ticket.category"].browse(
             int(kw.get("category"))
         )
-        company = category.company_id or http.request.env.user.company_id
+        selected_company = kw.get("company_id")
+        if selected_company is None: company = http.request.env.user.company_id
+        else: company = http.request.env["res.company"].sudo().browse(int(selected_company))
+        is_office = False
+        office_id = False
+        hotel_id = False
+        
+        if company.id == 6:
+            is_office = True
+            office_id = request.params.get('hotel_id')
+        else:
+            hotel_id = request.params.get('hotel_id')
         vals = {
             "company_id": company.id,
             "category_id": category.id,
-            "hotel_id": request.params.get('hotel_id'),
+            "hotel_id": hotel_id,
             "room_id": request.params.get('room_id'),
             "description": plaintext2html(kw.get("description")),
             "name": kw.get("subject"),
@@ -98,6 +124,8 @@ class HelpdeskTicketController(http.Controller):
             "stage_id": request.env["helpdesk.ticket"]
             .with_company(company.id)
             .default_get(["stage_id"])["stage_id"],
+            "is_office":is_office,
+            "office_id":office_id,
         }
         if company.helpdesk_mgmt_portal_select_team and kw.get("team"):
             team = (

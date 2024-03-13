@@ -1,5 +1,5 @@
-$my-bg-color: #1C2529;
-$my-text-color: #D3F4FF;
+$my-bg-color: #D3F4FF;
+$my-text-color: #1C2529;
 nav.navbar {
     background-color: $my-bg-color !important;
     .navbar-nav .nav-link span{
@@ -10,4 +10,13 @@ nav.navbar {
 footer.o_footer {
     background-color: $my-bg-color !important;
     color: $my-text-color;
+}
+
+.mb64 {
+    background-color: $my-bg-color !important;
+    color: $my-text-color;
+}
+
+.mb64 h1{
+    font-size: large;
 }

@@ -55,9 +55,9 @@ class HelpdeskTicket(models.Model):
         required=True,
         default=lambda self: self.env.company,
     )
-    is_staff = fields.Boolean(
+    is_office = fields.Boolean(
         default=False,
-        help="Indicates whether it is a staff or not.",
+        help="Indicates whether it is a office or not.",
     )
     # Modified section Alda - Hotel and room agregate
     hotel_id = fields.Many2one(
@@ -68,15 +68,15 @@ class HelpdeskTicket(models.Model):
     )
     room_id = fields.Many2one(
         comodel_name="pms.room",
-        string="Habitación",
+        string="Room",
         domain="[('pms_property_id', '=', hotel_id)]",
         help="The room associated with this ticket",
         widget="many2one_tags",
     )
-    # Modified section Alda - Add Staff
-    staff_id = fields.Many2one(
-        comodel_name="helpdesk.ticket.staff",
-        string="Staff",
+    # Modified section Alda - Add office
+    office_id = fields.Many2one(
+        comodel_name="pms.property",
+        string="Office name",
         domain="[('company_id', '=', company_id)]",
         help="The hotel associated with this ticket",
     )

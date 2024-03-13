@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <record id="view_helpdesk_ticket_staff_search" model="ir.ui.view">
-        <field name="name">helpdesk.ticket.staff.search</field>
-        <field name="model">helpdesk.ticket.staff</field>
+    <record id="view_helpdesk_ticket_office_search" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.office.search</field>
+        <field name="model">helpdesk.ticket.office</field>
         <field name="arch" type="xml">
-            <search string="Ticket Staff Search">
+            <search string="Ticket office Search">
                 <filter
                     string="Archived"
                     name="inactive"
@@ -15,11 +15,11 @@
             </search>
         </field>
     </record>
-    <record id="view_helpdesk_ticket_staff_form" model="ir.ui.view">
-        <field name="name">helpdesk.ticket.staff.form</field>
-        <field name="model">helpdesk.ticket.staff</field>
+    <record id="view_helpdesk_ticket_office_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.office.form</field>
+        <field name="model">helpdesk.ticket.office</field>
         <field name="arch" type="xml">
-            <form string="Staff">
+            <form string="office">
                 <header>
                 </header>
                 <sheet>
@@ -42,9 +42,9 @@
             </form>
         </field>
     </record>
-    <record id="view_helpdesk_ticket_staff_tree" model="ir.ui.view">
-        <field name="name">helpdesk.ticket.staff.tree</field>
-        <field name="model">helpdesk.ticket.staff</field>
+    <record id="view_helpdesk_ticket_office_tree" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.office.tree</field>
+        <field name="model">helpdesk.ticket.office</field>
         <field name="arch" type="xml">
             <tree decoration-muted="not active">
                 <field name="name" />
